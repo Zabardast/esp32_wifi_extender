@@ -68,6 +68,9 @@ void enable_nat(void* arg, esp_event_base_t event_base, int32_t event_id, void* 
 
         if (ip_info.ip.addr != 0) {
             
+            //
+            esp_netif_attach(sta_netif, esp_netif_get_io_driver(sta_netif));
+
             // Enable NAPT on the STA interface
 
             // Enable NAPT for the station interface
@@ -96,7 +99,7 @@ void enable_nat(void* arg, esp_event_base_t event_base, int32_t event_id, void* 
 
             //     // Enable IP forwarding for the STA IP address
             // ip_napt_enable(ip4_addr_get_u32(&ip_info.ip), 1);
-            //     ip_napt_enable(ip_info.ip.addr, 1);
+                // ip_napt_enable(ip_info.ip.addr, 1);
             // } else {
             //     ESP_LOGE(NAPT, "Failed to enable NAPT: %s", esp_err_to_name(enab_nat_err));
         } else {
@@ -142,6 +145,7 @@ void init_AP_STA()
     esp_wifi_set_config(WIFI_IF_STA, &wifi_config_sta);
 
 
+
     wifi_config_t wifi_config_ap = {
         .ap = {
             .ssid_len = strlen(EXAMPLE_ESP_WIFI_SSID),
@@ -149,8 +153,8 @@ void init_AP_STA()
             .password = EXAMPLE_ESP_WIFI_PASS,
             .channel = EXAMPLE_ESP_WIFI_CHANNEL,
             .max_connection = EXAMPLE_MAX_STA_CONN,
-            .authmode = WIFI_AUTH_WPA2_PSK
-            // .authmode = WIFI_AUTH_WPA2_WPA3_PSK
+            // .authmode = WIFI_AUTH_WPA2_PSK
+            .authmode = WIFI_AUTH_WPA2_WPA3_PSK
         },
     };
     esp_wifi_set_config(WIFI_IF_AP, &wifi_config_ap);
